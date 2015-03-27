@@ -34,14 +34,14 @@ local sensor = parse.createObject("sensors", {"room":4, "type":"thermal"})
 To retrieve a Parse object from the database, call *getObject()*. Pass the name of the class you want, the Parse object ID (returned when you save the object) and, optionally, a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires two parameters into which an error code and the retrieved object are placed, respectively. If you do not provide a callback, the method returns the object or `null` if an error was encountered.
 
 ```squirrel
-sensorObjects <- []
+sensorObjectIds <- []
 
 // Code at some point creates Parse object and seves its objectId
-// into the sensorObjects array
+// into the sensorObjectIds array
 
-// Load sensor object
+// Load current sensor object
 
-local sensor = parse.getObject("sensors", sensorObject[currentSensor])
+local sensor = parse.getObject("sensors", sensorObjectIds[currentSensor])
 if (object != null)
 {
   // Sensor loaded, proceed to process
@@ -55,14 +55,14 @@ if (object != null)
 To remove an object from the database, call *destroyObject()*. Pass the name of the class you want, the Parse object ID (returned when you save the object, see below) and, optionally, a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires a single parameter into which a table will be passed comprising two keys: *err* and *data*. This table is returned by the method itself if you do not provide a callback.
 
 ```squirrel
-sensorObjects <- []
+sensorObjectIds <- []
 
 // Code at some point creates Parse object and seves its objectId
-// into the sensorObjects array
+// into the sensorObjectIds array
 
-// Remove sensor object
+// Remove current sensor object
 
-local result = parse.getObject("sensors", sensorObject[currentSensor])
+local result = parse.getObject("sensors", sensorObjectIds[currentSensor])
 if (result.err != null)
 {
   server.log ("Could not destroy object: " + err)
@@ -142,11 +142,11 @@ else
 
 // Relocate the sensor to room 2
 
-sensor.set({"room":3})
+sensor.set({"room":2})
 
 // Update the record in the Parse database
 
-local result = sensor.save()
+result = sensor.save()
 if (result.err != null) server.log ("Could not update object: " + err)
 ```
 
