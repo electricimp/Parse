@@ -80,7 +80,7 @@ sensorObjects <- []
 // into the sensorObjects array
 
 local query = parse.createQuery("sensors")
-local search = query.find({"room":2})
+local searchResults = query.find()
 ```
 
 ## sendEvent(*eventName, [data], [callback]*)
@@ -104,11 +104,11 @@ local sensor = parse.createObject("sensors", {"room":4, "type":"thermal"})
 
 // Update the sensor definition with its manufacturer
 
-sensor.set({"make":"BMP"})
+sensor.set("make", "BMP")
 
 // Relocate it to room 3
 
-sensor.set({"room":3})
+sensor.set("room", 3)
 
 ```
 
