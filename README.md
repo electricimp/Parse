@@ -7,7 +7,7 @@ The library comprises three classes: Parse, Parse.Object and Parse.Query.
 ## Parse
 
 ## Constructor: Parse(*appId, restApiKey, [baseUrl], [version]*)
-<p id="#construct"></p>
+<p id="construct"></p>
 To instantiate a Parse object, you need to pass your Application ID and your REST API Key. Both of these can be located via your Parse app’s Dashboard: click on the cog icon and select ‘Keys’. 
 
 Optionally, you can also pass the URL of the endpoint you’ll be communicating with and/or the Parse API version number. If you omit these optional values, the default to `https://api.parse.com` and `1`, respectively.
@@ -17,7 +17,7 @@ parse <- Parse(YOUR_APP_ID, YOUR_REST_API_KEY)
 ```
 
 ## Class Methods
-<p id="#create"></p>
+<p id="create"></p>
 ## createObject(*className, [data]*)
 
 To create a data object, call *createObject()* and pass your chosen class name and, optionally, some data. 
