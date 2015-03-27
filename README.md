@@ -220,12 +220,12 @@ query.select(["room", "floor", "building"])
 
 ##setConstraint(*key, parseConstraint, value*)
 
-This method provides a means to enter Parse query search parameters (‘constraints’) without recourse to the convenience methods listed above. The values of *parseConstraint* may be any one of the following:
+This method provides a means to enter Parse query search parameters (‘constraints’) without recourse to the convenience methods listed above. The values of *parseConstraint*, all strings, may be any one of the following:
 
 <table width="100%">
     <tbody><tr>
-      <th>Key</th>
-      <th>Operation</th>
+      <th align="left"><i>parseConstraint</i></th>
+      <th align="left">Operation</th>
     </tr>
     <tr>
       <td>$lt</td>
