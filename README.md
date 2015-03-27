@@ -283,21 +283,21 @@ However you obtain the table, if this is the first time you saved the object, th
 
 ```squirrel
 local query = parse.createQuery("sensors").notEqual("type", "light")
-local search = query.find()
-
-if (search.err != null)
-{
-  server.log ("Could not perform query: " + err)
-}
-else
-{
-  server.log("The following rooms contain motion or thermal sensors:")
-  
-  foreach (sensor in search.data.results)
+query.find(function (err, data) {
+  if (err != null)
   {
-    server.log("Room " + sensor.room)
+    server.log ("Could not perform query: " + err.error)
   }
-}
+  else
+  {
+    server.log("The following rooms contain motion or thermal sensors:")
+  
+    foreach (sensor in data.results)
+    {
+      server.log("Room " + sensor.room)
+    }
+  }
+})
 ```
 
 ## License
