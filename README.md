@@ -5,9 +5,9 @@ This library wraps Facebook’s [Parse Platform](https://parse.com).
 The library comprises three classes: Parse, Parse.Object and Parse.Query. 
 
 ## Parse
-
-## Constructor: Parse(*appId, restApiKey, [baseUrl], [version]*)
 <p id="construct"></p>
+## Constructor: Parse(*appId, restApiKey, [baseUrl], [version]*)
+
 To instantiate a Parse object, you need to pass your Application ID and your REST API Key. Both of these can be located via your Parse app’s Dashboard: click on the cog icon and select ‘Keys’. 
 
 Optionally, you can also pass the URL of the endpoint you’ll be communicating with and/or the Parse API version number. If you omit these optional values, the default to `https://api.parse.com` and `1`, respectively.
