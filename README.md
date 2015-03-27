@@ -183,7 +183,7 @@ else
 
 sensor.set({"room":2})
 
-// Update the record in the Parse database
+// Update the record in the Parse database asynchronously this time
 
 sensor.save(function(err, data) {
   if (err != null) server.log ("Could not update object: " + err.error)
@@ -282,11 +282,6 @@ To initiate a query, instantiate a query object and call its *find()* method. Th
 However you obtain the table, if this is the first time you saved the object, the results of the query will be placed in the *data* field. The results are associated with a key named *results* whose value is an array of zero or more tables, each of which contains the data from those objects that match the query.
 
 ```squirrel
-sensorObjects <- []
-
-// Code at some point creates Parse object and seves its objectId
-// into the sensorObjects array
-
 local query = parse.createQuery("sensors").notEqual("type", "light")
 local search = query.find()
 
