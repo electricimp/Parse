@@ -31,15 +31,57 @@ local sensor = parse.createObject("sensors", {"room":4, "type":"thermal"})
 
 ## getObject(*className, objectId, [callback]*)
 
-To retrieve a Parse object from the database, call *getObject()*. Pass the name of the class you want, the Parse object ID (returned when you save the object) and, optionally, a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires a single parameter into which a table will be passed comprising two keys: *err* and *data*. This table is returned by the method itself if you do not provide a callback. 
+To retrieve a Parse object from the database, call *getObject()*. Pass the name of the class you want, the Parse object ID (returned when you save the object) and, optionally, a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires two parameters into which an error code and the retrieved object are placed, respectively. If you do not provide a callback, the method returns the object or `null` if an error was encountered.
+
+```squirrel
+sensorObjects <- []
+
+// Code at some point creates Parse object and seves its objectId
+// into the sensorObjects array
+
+// Load sensor object
+
+local sensor = parse.getObject("sensors", sensorObject[currentSensor])
+if (object != null)
+{
+  // Sensor loaded, proceed to process
+  
+  . . . 
+}
+```
 
 ## destroyObject(*className, objectId, [callback]*)
 
 To remove an object from the database, call *destroyObject()*. Pass the name of the class you want, the Parse object ID (returned when you save the object, see below) and, optionally, a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires a single parameter into which a table will be passed comprising two keys: *err* and *data*. This table is returned by the method itself if you do not provide a callback.
 
+```squirrel
+sensorObjects <- []
+
+// Code at some point creates Parse object and seves its objectId
+// into the sensorObjects array
+
+// Remove sensor object
+
+local result = parse.getObject("sensors", sensorObject[currentSensor])
+if (result.err != null)
+{
+  server.log ("Could not destroy object: " + err)
+}
+```
+
 ## createQuery(*className*)
 
 To create an analytics query, which is used to retrieve all the objects within a specified class, call *createQuery()* and pass your chosen class name. To initiate the query, call [its *find()* method](#find).
+
+```squirrel
+sensorObjects <- []
+
+// Code at some point creates Parse object and seves its objectId
+// into the sensorObjects array
+
+local query = parse.createQuery("sensors")
+local search = query.find({"room":2})
+```
 
 ## sendEvent(*eventName, [data], [callback]*)
 
@@ -117,7 +159,30 @@ if (result.err != null) server.log ("Could not update object: " + err)
 
 To initiate a query, instantiate a query object and call its *find()* method. This can take an optional callback function, in which case the query will be processed asynchronously, otherwise it will be processed synchronously. The callback requires a single parameter into which a table will be passed comprising two keys: *err* and *data*. This table is returned by the method itself if you do not provide a callback.
 
-However you obtain the table, if this is the first time you saved the object, the results of the query will be placed in the *data* field.
+However you obtain the table, if this is the first time you saved the object, the results of the query will be placed in the *data* field. The results comprises a key named *results* whose value is an array of zero or more tables eacg of which contains the data from those objects that match the query.
+
+```squirrel
+sensorObjects <- []
+
+// Code at some point creates Parse object and seves its objectId
+// into the sensorObjects array
+
+local query = parse.createQuery("sensors")
+local search = query.find({"room":2})
+if (search.err != null)
+{
+  server.log ("Could not perform query: " + err)
+}
+else
+{
+  server,log("The following sensors match your query:")
+  
+  foreach (sensor in results)
+  {
+    server.log("  " + sensor.type)
+  }
+}
+```
 
 ## License
 
