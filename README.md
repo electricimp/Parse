@@ -6,14 +6,12 @@ The library comprisese three classes: Parse, Parse.Object and Parse.Query.
 
 ## Parse
 
-## Class Usage
-
-## Constructor: Parse(*appId, clientKey, [baseUrl], [version]*)
+## Constructor: Parse(*appId, restApiKey, [baseUrl], [version]*)
 
 To instantiate a Parse object, you need to pass your Application ID and your Client Key. Optionally, you can also pass the URL of the endpoint you’ll be communicating with and/or the Parse API version number. If you omit these optional values, the default to `https://api.parse.com` and `1`, respectively.
 
 ```squirrel
-parse <- Parse(YOUR_APP_ID, YOUR_CLIENT_KEY)
+parse <- Parse(YOUR_APP_ID, YOUR_REST_API_KEY)
 ```
 
 ## Parse
