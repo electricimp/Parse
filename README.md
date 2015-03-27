@@ -39,7 +39,7 @@ sensorObjectIds <- []
 // Code at some point creates Parse object and seves its objectId
 // into the sensorObjectIds array
 
-// Load current sensor object
+// Load current sensor object synchronously
 
 local sensor = parse.getObject("sensors", sensorObjectIds[currentSensor])
 if (object != null)
@@ -48,6 +48,20 @@ if (object != null)
   
   . . . 
 }
+
+// Load current sensor object asynchronously
+
+parse.getObject("sensors", sensorObjectIds[currentSensor], function(err, object) {
+  if (object != null)
+  {
+    // Sensor loaded, proceed to process it
+    . . . 
+  }
+  else
+  {
+    server.log("Error " + err.code + ": " + err.error)
+  }
+})
 ```
 
 ## destroyObject(*className, objectId, [callback]*)
@@ -60,13 +74,22 @@ sensorObjectIds <- []
 // Code at some point creates Parse object and seves its objectId
 // into the sensorObjectIds array
 
-// Remove current sensor object
+// Remove current sensor object synchronously
 
-local result = parse.getObject("sensors", sensorObjectIds[currentSensor])
+local result = parse.destroyObject("sensors", sensorObjectIds[currentSensor])
 if (result.err != null)
 {
-  server.log ("Could not destroy object: " + err)
+  server.log ("Could not destroy object: " + err.error)
 }
+
+// Remove current sensor object asynchronously
+
+parse.destroyObject("sensors", sensorObjectIds[currentSensor], function(err, data) {
+  if (err != null)
+  {
+    server.log ("Could not destroy object: " + err.error) 
+  }
+})
 ```
 
 ## createQuery(*className*)
@@ -265,8 +288,7 @@ sensorObjects <- []
 // Code at some point creates Parse object and seves its objectId
 // into the sensorObjects array
 
-local query = parse.createQuery("sensors")
-query.setConstraint("type", "$ne", "light")
+local query = parse.createQuery("sensors").notEqual("type", "light")
 local search = query.find()
 
 if (search.err != null)
