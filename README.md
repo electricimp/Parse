@@ -71,16 +71,10 @@ if (result.err != null)
 
 ## createQuery(*className*)
 
-To create an analytics query, which is used to retrieve all the objects within a specified class, call *createQuery()* and pass your chosen class name. To initiate the query, call [its *find()* method](#find).
+To create an analytics query, which is used to retrieve all the objects within a specified class, call *createQuery()* and pass your chosen class name. You then add search terms to the query. To initiate the search, call the query’s [*find()*](#find) method.
 
 ```squirrel
-sensorObjects <- []
-
-// Code at some point creates Parse object and seves its objectId
-// into the sensorObjects array
-
 local query = parse.createQuery("sensors")
-local searchResults = query.find()
 ```
 
 ## sendEvent(*eventName, [data], [callback]*)
@@ -102,7 +96,7 @@ local sensor = parse.createObject("sensors", {"room":4, "type":"thermal"})
 
 . . .
 
-// Update the sensor definition with its manufacturer
+// Update the sensor definition with its manufacturer data
 
 sensor.set("make", "BMP")
 
@@ -160,7 +154,7 @@ if (result.err != null) server.log ("Could not update object: " + err)
 
 To initiate a query, instantiate a query object and call its *find()* method. This can take an optional callback function, in which case the query will be processed asynchronously, otherwise it will be processed synchronously. The callback requires a single parameter into which a table will be passed comprising two keys: *err* and *data*. This table is returned by the method itself if you do not provide a callback.
 
-However you obtain the table, if this is the first time you saved the object, the results of the query will be placed in the *data* field. The results comprises a key named *results* whose value is an array of zero or more tables eacg of which contains the data from those objects that match the query.
+However you obtain the table, if this is the first time you saved the object, the results of the query will be placed in the *data* field. The results are associated with a key named *results* whose value is an array of zero or more tables, each of which contains the data from those objects that match the query.
 
 ```squirrel
 sensorObjects <- []
@@ -169,19 +163,20 @@ sensorObjects <- []
 // into the sensorObjects array
 
 local query = parse.createQuery("sensors")
-
+query.setConstraint("type", "$ne", "light")
 local search = query.find()
+
 if (search.err != null)
 {
   server.log ("Could not perform query: " + err)
 }
 else
 {
-  server,log("The following sensors match your query:")
+  server.log("The following rooms contain motion or thermal sensors:")
   
-  foreach (sensor in results)
+  foreach (sensor in search.data.results)
   {
-    server.log("  " + sensor.type)
+    server.log("Room " + sensor.room)
   }
 }
 ```
