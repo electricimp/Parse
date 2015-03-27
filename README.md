@@ -2,13 +2,13 @@
 
 This library wraps Facebook’s [Parse Platform](https://parse.com).
 
-The library comprises three classes: Parse, Parse.Object and Parse.Query. 
+The library comprises three classes: Parse, Parse.Object and Parse.Query.
 
 ## Parse
 <p id="construct"></p>
 ## Constructor: Parse(*appId, restApiKey, [baseUrl], [version]*)
 
-To instantiate a Parse object, you need to pass your Application ID and your REST API Key. Both of these can be located via your Parse app’s Dashboard: click on the cog icon and select ‘Keys’. 
+To instantiate a Parse object, you need to pass your Application ID and your REST API Key. Both of these can be located via your Parse app’s Dashboard: click on the cog icon and select ‘Keys’.
 
 Optionally, you can also pass the URL of the endpoint you’ll be communicating with and/or the Parse API version number. If you omit these optional values, the default to `https://api.parse.com` and `1`, respectively.
 
@@ -20,10 +20,10 @@ parse <- Parse(YOUR_APP_ID, YOUR_REST_API_KEY)
 <p id="create"></p>
 ## createObject(*className, [data]*)
 
-To create a data object, call *createObject()* and pass your chosen class name and, optionally, some data. 
+To create a data object, call *createObject()* and pass your chosen class name and, optionally, some data.
 You can later update this data &ndash; or add some &ndash; using the object’s [*set()*](#set) method. *createObject()* returns the new Parse object.
 
-When you are ready to store the object in the Parse database in the cloud, call the object’s [*save()*](#save) method. This will automatically create the class if it has not yet been established. 
+When you are ready to store the object in the Parse database in the cloud, call the object’s [*save()*](#save) method. This will automatically create the class if it has not yet been established.
 
 ```squirrel
 local sensor = parse.createObject("sensors", {"room":4, "type":"thermal"})
@@ -45,8 +45,8 @@ local sensor = parse.getObject("sensors", sensorObjectIds[currentSensor])
 if (object != null)
 {
   // Sensor loaded, proceed to process it
-  
-  . . . 
+
+  . . .
 }
 
 // Load current sensor object asynchronously
@@ -55,7 +55,7 @@ parse.getObject("sensors", sensorObjectIds[currentSensor], function(err, object)
   if (object != null)
   {
     // Sensor loaded, proceed to process it
-    . . . 
+    . . .
   }
   else
   {
@@ -87,7 +87,7 @@ if (result.err != null)
 parse.destroyObject("sensors", sensorObjectIds[currentSensor], function(err, data) {
   if (err != null)
   {
-    server.log ("Could not destroy object: " + err.error) 
+    server.log ("Could not destroy object: " + err.error)
   }
 })
 ```
@@ -177,7 +177,7 @@ else
   }
 }
 
-. . . 
+. . .
 
 // Relocate the sensor to room 2
 
@@ -236,7 +236,7 @@ query.notContainedIn("type", ["light", "motion", "thermal", "pressure"])
 
 ##exists(*key*)
 
-Sets the query to find all data objects in the Parse database class whose *key* contains a value (as opposed to `null`). 
+Sets the query to find all data objects in the Parse database class whose *key* contains a value (as opposed to `null`).
 
 ##notExists(*key*)
 
@@ -244,7 +244,7 @@ Sets the query to find all data objects in the Parse database class whose *key* 
 
 ##select(*keyArray*)
 
-Sets the query to find all data objects in the Parse database class which have non-`null` values for all the keys listed in *keyArray*. 
+Sets the query to find all data objects in the Parse database class which have non-`null` values for all the keys listed in *keyArray*.
 
 ```squirrel
 local query = parse.createQuery("sensors")
@@ -291,7 +291,7 @@ query.find(function (err, data) {
   else
   {
     server.log("The following rooms contain motion or thermal sensors:")
-  
+
     foreach (sensor in data.results)
     {
       server.log("Room " + sensor.room)
@@ -299,6 +299,14 @@ query.find(function (err, data) {
   }
 })
 ```
+
+## //TODO:
+
+Add support for:
+ - Push Notifications
+ - Config
+ - Users/Sessions
+
 
 ## License
 
