@@ -7,7 +7,7 @@ The library comprises three classes: Parse, Parse.Object and Parse.Query.
 ## Parse
 
 ## Constructor: Parse(*appId, restApiKey, [baseUrl], [version]*)
-
+<p id="#construct"></p>
 To instantiate a Parse object, you need to pass your Application ID and your REST API Key. Both of these can be located via your Parse app’s Dashboard: click on the cog icon and select ‘Keys’. 
 
 Optionally, you can also pass the URL of the endpoint you’ll be communicating with and/or the Parse API version number. If you omit these optional values, the default to `https://api.parse.com` and `1`, respectively.
@@ -17,10 +17,10 @@ parse <- Parse(YOUR_APP_ID, YOUR_REST_API_KEY)
 ```
 
 ## Class Methods
-
+<p id="#create"></p>
 ## createObject(*className, [data]*)
 
-To create a Parse object, call *createObject()* and pass your chosen class name and, optionally, some object data. 
+To create a data object, call *createObject()* and pass your chosen class name and, optionally, some data. 
 You can later update this data &ndash; or add some &ndash; using the object’s [*set()*](#set) method. *createObject()* returns the new Parse object.
 
 When you are ready to store the object in the Parse database in the cloud, call the object’s [*save()*](#save) method. This will automatically create the class if it has not yet been established. 
@@ -31,7 +31,7 @@ local sensor = parse.createObject("sensors", {"room":4, "type":"thermal"})
 
 ## getObject(*className, objectId, [callback]*)
 
-To retrieve a Parse object from the database, call *getObject()*. Pass the name of the class you want, the Parse object ID (returned when you save the object) and, optionally, a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires two parameters into which an error code and the retrieved object are placed, respectively. If you do not provide a callback, the method returns the object or `null` if an error was encountered.
+To retrieve a data object from the database, call *getObject()*. Pass the name of the class you want, the Parse object ID (returned when you first saved the object) and, optionally, a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires two parameters into which an error code and the retrieved object are placed, respectively. If you do not provide a callback, the method returns the object or `null` if an error was encountered.
 
 ```squirrel
 sensorObjectIds <- []
@@ -44,7 +44,7 @@ sensorObjectIds <- []
 local sensor = parse.getObject("sensors", sensorObjectIds[currentSensor])
 if (object != null)
 {
-  // Sensor loaded, proceed to process
+  // Sensor loaded, proceed to process it
   
   . . . 
 }
@@ -52,7 +52,7 @@ if (object != null)
 
 ## destroyObject(*className, objectId, [callback]*)
 
-To remove an object from the database, call *destroyObject()*. Pass the name of the class you want, the Parse object ID (returned when you save the object, see below) and, optionally, a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires a single parameter into which a table will be passed comprising two keys: *err* and *data*. This table is returned by the method itself if you do not provide a callback.
+To remove a data object from the database, call *destroyObject()*. Pass the name of the class you want, the Parse object ID (returned when you save the object, see below) and, optionally, a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires a single parameter into which a table will be passed comprising two keys: *err* and *data*. This table is returned by the method itself if you do not provide a callback.
 
 ```squirrel
 sensorObjectIds <- []
@@ -82,6 +82,10 @@ local query = parse.createQuery("sensors")
 To record an action &ndash; an ‘event’, in Parse terminology &ndash; call *sendEvent()*. Pass the name of the event and, optionally, JSON data associated with that event. You can also pass a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires a single parameter into which a table will be passed comprising two keys: *err* and *data*. This table is returned by the method itself if you do not provide a callback.
 
 ## Parse.Object
+
+## Constructor: Parse.Object(*parse, className, [data]*)
+
+This method takes a Parse object ([see above](#construct)), the desired class name and, optionally, data with which to initialize the new object. It returns the new data object. It is typically not used directly but via the Parse object’s [*createObject()*](#create) method.
 
 ## Class Methods
 
@@ -153,6 +157,122 @@ if (result.err != null) server.log ("Could not update object: " + err)
 ## Parse.Query
 
 ## Class Methods
+
+The following xx methods are used on a Parse Query object to define its search parameters. Once the query has been designed, it is initiated using the query’s [*find()*](#find) method.
+
+## lessThan(*key, value*)
+
+Sets the query to find all data objects in the Parse database class with the key *key* and whose own value associated with that key is less than *value*.
+
+## lessThanOrEqualTo(*key, value*)
+
+Sets the query to find all data objects in the Parse database class with the key *key* and whose own value associated with that key is less than or equal to *value*.
+
+## greaterThan(*key, value*)
+
+Sets the query to find all data objects in the Parse database class with the key *key* and whose own value associated with that key is greater than *value*.
+
+## greaterThanOrEqualTo(*key, value*)
+
+Sets the query to find all data objects in the Parse database class with the key *key* and whose own value associated with that key is greater than or equal to *value*.
+
+## notEqualTo(*key, value*)
+
+Sets the query to find all data objects in the Parse database class with the key *key* and whose own value associated with that key does not equal *value*.
+
+## containedIn(*key, array*)
+
+Sets the query to find all data objects in the Parse database class with the key *key* and whose value matches one of the elements in the passed array.
+
+```squirrel
+local query = parse.createQuery("sensors")
+query.containedIn("type", ["light", "motion", "thermal", "pressure"])
+```
+
+##notContainedIn(*key, array*)
+
+Sets the query to find all data objects in the Parse database class with the key *key* and whose value does not match one of the elements in the passed array.
+
+```squirrel
+local query = parse.createQuery("sensors")
+query.notContainedIn("type", ["light", "motion", "thermal", "pressure"])
+```
+
+##exists(*key*)
+
+Sets the query to find all data objects in the Parse database class whose *key* contains a value (as opposed to `null`). 
+
+##notExists(*key*)
+
+Sets the query to find all data objects in the Parse database class whose *key* contains `null`.
+
+##select(*keyArray*)
+
+Sets the query to find all data objects in the Parse database class which have non-`null` values for all the keys listed in *keyArray*. 
+
+```squirrel
+local query = parse.createQuery("sensors")
+
+// Find all sensors with a recorded location
+
+query.select(["room", "floor", "building"])
+```
+
+##setConstraint(*key, parseConstraint, value*)
+
+This method provides a means to enter Parse query search parameters (‘constraints’) without recourse to the convenience methods listed above. The values of *parseConstraint* may be any one of the following:
+
+<table width="100%">
+    <tbody><tr>
+      <th>Key</th>
+      <th>Operation</th>
+    </tr>
+    <tr>
+      <td>$lt</td>
+      <td>Less Than</td>
+    </tr>
+    <tr>
+      <td>$lte</td>
+      <td>Less Than Or Equal To</td>
+    </tr>
+    <tr>
+      <td>$gt</td>
+      <td>Greater Than</td>
+    </tr>
+    <tr>
+      <td>$gte</td>
+      <td>Greater Than Or Equal To</td>
+    </tr>
+    <tr>
+      <td>$ne</td>
+      <td>Not Equal To</td>
+    </tr>
+    <tr>
+      <td>$in</td>
+      <td>Contained In</td>
+    </tr>
+    <tr>
+      <td>$nin</td>
+      <td>Not Contained in</td>
+    </tr>
+    <tr>
+      <td>$exists</td>
+      <td>A value is set for the key</td>
+    </tr>
+    <tr>
+      <td>$select</td>
+      <td>This matches a value for a key in the result of a different query</td>
+    </tr>
+    <tr>
+      <td>$dontSelect</td>
+      <td>Requires that a key's value not match a value for a key in the result of a different query</td>
+    </tr>
+    <tr>
+      <td>$all</td>
+      <td>Contains all of the given values</td>
+    </tr>
+  </tbody>
+</table>
 
 <p id="find"></p>
 ## find(*[callback]*)
