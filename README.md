@@ -81,12 +81,23 @@ When your object is ready to save in the Parse database, call its *save()* metho
 However you obtain the table, if this is the first time you saved the object, you should query *data* for the key *objectId*. This is used by the *getObject()* and *destroyObject()* methods to identify specific objects saved within the Parse database. It is also used internally by an existing object to identify itself when, having perhaps changed the data it contains, you call *save()* again. If the object already exists in the Parse database, its *objectId* is used to ensure its record is updated rather than uses as the basis of a new record.
 
 ```squirrel
+sensorObjects <- []
+
 local sensor = parse.createObject("sensors", {"room":4, "type":"thermal"})
 
 // Synchronous save
 
 local result = sensor.save()
-if (result.err != null) server.log ("Could not save object: " + err)
+if (result.err != null)
+{
+  server.log ("Could not save object: " + err)
+}
+else
+{
+  if ("objectId" in result.data)
+  {
+    sensorObjects.append(result.data.objectId)
+  }
 
 . . . 
 
