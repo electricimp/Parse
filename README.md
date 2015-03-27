@@ -16,7 +16,7 @@ Optionally, you can also pass the URL of the endpoint you’ll be communicating 
 parse <- Parse(YOUR_APP_ID, YOUR_REST_API_KEY)
 ```
 
-## Parse
+## Class Methods
 
 ## createObject(*className, [data]*)
 
@@ -82,6 +82,8 @@ local query = parse.createQuery("sensors")
 To record an action &ndash; an ‘event’, in Parse terminology &ndash; call *sendEvent()*. Pass the name of the event and, optionally, JSON data associated with that event. You can also pass a callback function. If you provide a callback, the retrieval request will be processed asynchronously, otherwise it will be processed synchronously. The callback requires a single parameter into which a table will be passed comprising two keys: *err* and *data*. This table is returned by the method itself if you do not provide a callback.
 
 ## Parse.Object
+
+## Class Methods
 
 ## get(*key*)
 
@@ -149,6 +151,9 @@ if (result.err != null) server.log ("Could not update object: " + err)
 ```
 
 ## Parse.Query
+
+## Class Methods
+
 <p id="find"></p>
 ## find(*[callback]*)
 
