@@ -229,27 +229,27 @@ This method provides a means to enter Parse query search parameters (‘constrai
     </tr>
     <tr>
       <td>$lt</td>
-      <td>Less Than</td>
+      <td>Less than</td>
     </tr>
     <tr>
       <td>$lte</td>
-      <td>Less Than Or Equal To</td>
+      <td>Less than or equal to</td>
     </tr>
     <tr>
       <td>$gt</td>
-      <td>Greater Than</td>
+      <td>Greater than</td>
     </tr>
     <tr>
       <td>$gte</td>
-      <td>Greater Than Or Equal To</td>
+      <td>Greater than or equal to</td>
     </tr>
     <tr>
       <td>$ne</td>
-      <td>Not Equal To</td>
+      <td>Not equal to</td>
     </tr>
     <tr>
       <td>$in</td>
-      <td>Contained In</td>
+      <td>Contained in</td>
     </tr>
     <tr>
       <td>$nin</td>
@@ -261,11 +261,11 @@ This method provides a means to enter Parse query search parameters (‘constrai
     </tr>
     <tr>
       <td>$select</td>
-      <td>This matches a value for a key in the result of a different query</td>
+      <td>Matches a value for a key in the supplied array of keys</td>
     </tr>
     <tr>
       <td>$dontSelect</td>
-      <td>Requires that a key's value not match a value for a key in the result of a different query</td>
+      <td>Requires that a key’s value not match a key in the supplied array of keys</td>
     </tr>
     <tr>
       <td>$all</td>
