@@ -92,6 +92,20 @@ This method takes a Parse object ([see above](#construct)), the desired class na
 ## get(*key*)
 
 Use the *get()* method to retrieve the value associated with the specified key from the target object.
+
+```squirrel
+local rooms = ["Bedroom", "Bathroom", "Hall", "Living Room", "Kitchen", "Garden"]
+foreach (index, sensor in sensorList)
+{
+  server.log("Sensor " + format("%u", index + 1) + " is located in the " + rooms[sensor.get("room")])
+}
+
+// Displays
+// Sensor 1 is located in the Hall
+// Sensor 2 is located in the Kitchen
+// Sensor 3 is located in the Kitchen
+```
+
 <p id="set"></p>
 ## set(*key*, *data*)
 
@@ -158,7 +172,7 @@ if (result.err != null) server.log ("Could not update object: " + err)
 
 ## Class Methods
 
-The following xx methods are used on a Parse Query object to define its search parameters. Once the query has been designed, it is initiated using the query’s [*find()*](#find) method.
+The following 11 methods are used on a Parse Query object to define its search parameters. Once the query has been designed, it is initiated using the query’s [*find()*](#find) method.
 
 ## lessThan(*key, value*)
 
@@ -223,54 +237,18 @@ query.select(["room", "floor", "building"])
 This method provides a means to enter Parse query search parameters (‘constraints’) without recourse to the convenience methods listed above. The values of *parseConstraint*, all strings, may be any one of the following:
 
 <table width="100%">
-    <tbody><tr>
-      <th align="left"><i>parseConstraint</i></th>
-      <th align="left">Operation</th>
-    </tr>
-    <tr>
-      <td>$lt</td>
-      <td>Less than</td>
-    </tr>
-    <tr>
-      <td>$lte</td>
-      <td>Less than or equal to</td>
-    </tr>
-    <tr>
-      <td>$gt</td>
-      <td>Greater than</td>
-    </tr>
-    <tr>
-      <td>$gte</td>
-      <td>Greater than or equal to</td>
-    </tr>
-    <tr>
-      <td>$ne</td>
-      <td>Not equal to</td>
-    </tr>
-    <tr>
-      <td>$in</td>
-      <td>Contained in</td>
-    </tr>
-    <tr>
-      <td>$nin</td>
-      <td>Not Contained in</td>
-    </tr>
-    <tr>
-      <td>$exists</td>
-      <td>A value is set for the key</td>
-    </tr>
-    <tr>
-      <td>$select</td>
-      <td>Matches a value for a key in the supplied array of keys</td>
-    </tr>
-    <tr>
-      <td>$dontSelect</td>
-      <td>Requires that a key’s value not match a key in the supplied array of keys</td>
-    </tr>
-    <tr>
-      <td>$all</td>
-      <td>Contains all of the given values</td>
-    </tr>
+  <tbody><tr><th align="left"><i>parseConstraint</i></th><th align="left">Operation</th></tr>
+  <tr><td>$lt</td><td>Less than</td></tr>
+  <tr><td>$lte</td><td>Less than or equal to</td></tr>
+  <tr><td>$gt</td><td>Greater than</td></tr>
+  <tr><td>$gte</td><td>Greater than or equal to</td></tr>
+  <tr><td>$ne</td><td>Not equal to</td></tr>
+  <tr><td>$in</td><td>Contained in</td></tr>
+  <tr><td>$nin</td><td>Not Contained in</td></tr>
+  <tr><td>$exists</td><td>A value is set for the key</td></tr>
+  <tr><td>$select</td><td>Matches a value for a key in the supplied array of keys</td></tr>
+  <tr><td>$dontSelect</td><td>Requires that a key’s value not match a key in the supplied array of keys</td></tr>
+  <tr><td>$all</td><td>Contains all of the given values</td></tr>
   </tbody>
 </table>
 
