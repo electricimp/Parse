@@ -140,6 +140,7 @@ else
   {
     sensorObjects.append(result.data.objectId)
   }
+}
 
 . . . 
 
@@ -168,7 +169,8 @@ sensorObjects <- []
 // into the sensorObjects array
 
 local query = parse.createQuery("sensors")
-local search = query.find({"room":2})
+
+local search = query.find()
 if (search.err != null)
 {
   server.log ("Could not perform query: " + err)
