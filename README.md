@@ -2,7 +2,7 @@
 
 This library wraps Facebook’s [Parse Platform](https://parse.com).
 
-The library comprisese three classes: Parse, Parse.Object and Parse.Query. 
+The library comprises three classes: Parse, Parse.Object and Parse.Query. 
 
 ## Parse
 
