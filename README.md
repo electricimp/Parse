@@ -4,6 +4,8 @@ This library wraps Facebook’s [Parse Platform](https://parse.com).
 
 The library comprises three classes: Parse, Parse.Object and Parse.Query.
 
+**To add this library to your project, add** `#require "Parse.class.nut:1.0.0"` **to the top of your agent code**
+
 ## Parse
 <p id="construct"></p>
 ## Constructor: Parse(*appId, restApiKey, [baseUrl], [version]*)
