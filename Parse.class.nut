@@ -361,7 +361,7 @@ class Parse.Query {
 
         // create & process request
         local queryData = _buildQueryData();
-        local data = http.urlencode({ "where": http.jsonencode(queryData.where) });
+        local data = http.urlencode(queryData);
 
         return _parse._processReq(_parse.request("GET", resource + "?" + data, null, {}), cb);
     }
@@ -380,7 +380,7 @@ class Parse.Query {
         }
 
         if (_constraints != null) data["where"] <- null;
-        data.where = _constraints;
+        data.where = http.jsonencode(_constraints);
         return data;
     }
 }
