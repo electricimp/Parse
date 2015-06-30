@@ -1,20 +1,25 @@
 class Parse {
+    static version = [1,0,1];
+
     _appId = null;
     _apiKey = null;
 
-    _baseUrl = "https://api.parse.com";
-    _version = "1"
+    _baseUrl = null;
+    _version = null;
 
     // ERRORS
     static ERR_NULL_DATA = "ERR_NULL_DATA: data cannot be null";
-    static ERR_NO_OBJETID = "ERR_NO_OBJECTID: missing require parameter 'objectId'";
+    static ERR_NO_OBJECT_ID = "ERR_NO_OBJECTID: missing require parameter 'objectId'";
 
     constructor(appId, apiKey, baseUrl = null, version = null) {
         _appId = appId;
         _apiKey = apiKey;
 
         if (baseUrl != null) _baseUrl = baseUrl;
+        else _baseUrl = "https://api.parse.com"
+
         if (version != null) _version = version.tostring();
+        else _version = "1";
     }
 
     /******************** Objects ********************/
@@ -59,9 +64,15 @@ class Parse {
         return _processReq(request("POST", resource, null, data), cb);
     }
 
+    /******************** Push Notifications ********************/
+    function createPushClient(installationId = null) {
+        return Parse.Push(this, installationId);
+    }
+
     /******************** Utility Methods ********************/
     function request(verb, path, additionalHeaders, data) {
-        local url = format("%s/%s/%s", _baseUrl, _version, path);
+        local url = format("%s/%s%s", _baseUrl, _version, path);
+
         local headers = _baseHeaders();
         if (additionalHeaders != null) {
             foreach(idx,val in additionalHeaders) {
@@ -90,15 +101,25 @@ class Parse {
 
         try {
             if (resp.statuscode >= 200 && resp.statuscode < 300) {
-                data = http.jsondecode(resp.body);
+                if (resp.body == null || resp.body == "") {
+                    data = {};
+                } else {
+                    data = http.jsondecode(resp.body);
+                }
             } else {
-                err = http.jsondecode(resp.body);
+                if (resp.body == null || resp.body == "") {
+                    err = resp.statuscode;
+                } else {
+                    err = http.jsondecode(resp.body);
+                }
+
+                err = { "code": resp.statuscode, "error": err };
             }
         } catch (ex) {
-            err = { code = -1, error = ex };
+            err = { "code": -1, "error": ex };
         }
 
-        return { err = err, data = data };
+        return { "err": err, "data": data };
     }
 
     function _baseHeaders() {
@@ -157,24 +178,24 @@ class Parse.Object {
 
     function fetch(cb = null) {
         // validate request
-        if (!("objectId" in _data)) throw _parse.ERR_NO_OBJETID;
+        if (!("objectId" in _data)) throw _parse.ERR_NO_OBJECT_ID;
 
         // setup url
         local resource = format("/classes/%s/%s", _className, _data.objectId);
 
         // create & process request
-        return _processObjectRequest(parse.request("GET", resource, null, null), cb);
+        return _processObjectRequest(_parse.request("GET", resource, null, null), cb);
     }
 
     function destroy(cb = null) {
         // validate request
-        if (!("objectId" in _data)) throw _parse.ERR_NO_OBJETID;
+        if (!("objectId" in _data)) throw _parse.ERR_NO_OBJECT_ID;
 
         // setup url
         local resource = format("/classes/%s/%s", _className, _data.objectId);
 
         // create & process request
-        local req = parse.request("DELETE", resource, null, null);
+        local req = _parse.request("DELETE", resource, null, null);
 
         if (cb == null) return _processDestroyResponse(req.sendsync());
 
@@ -304,11 +325,11 @@ class Parse.Query {
     }
 
     function containedIn(attr, arr) {
-        return setConstraint(attr, "$in", http.jsonencode(arr));
+        return setConstraint(attr, "$in", arr);
     }
 
     function notContainedIn(attr, arr) {
-        return setConstraint(attr, "$nin", http.jsonencode(arr));
+        return setConstraint(attr, "$nin", arr);
     }
 
     function exists(attr) {
@@ -341,11 +362,13 @@ class Parse.Query {
     /******************** Exec Functions ********************/
     function find(cb = null) {
         // setup url
-        local queryParams = http.urlencode(_buildQueryData());
-        local url = format("/classes/%s?%s", _className, queryParams);
+        local resource = format("/classes/%s", _className);
 
         // create & process request
-        return parse._processReq(parse.request("GET", url, null, {}), cb);
+        local queryData = _buildQueryData();
+        local data = http.urlencode({ "where": http.jsonencode(queryData.where) });
+
+        return _parse._processReq(_parse.request("GET", resource + "?" + data, null, {}), cb);
     }
 
     /******************** PRIVATE METHODS (DO NOT CALL ********************/
@@ -362,8 +385,7 @@ class Parse.Query {
         }
 
         if (_constraints != null) data["where"] <- null;
-        data.where = http.jsonencode(_constraints);
+        data.where = _constraints;
         return data;
     }
 }
-
