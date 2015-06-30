@@ -64,11 +64,6 @@ class Parse {
         return _processReq(request("POST", resource, null, data), cb);
     }
 
-    /******************** Push Notifications ********************/
-    function createPushClient(installationId = null) {
-        return Parse.Push(this, installationId);
-    }
-
     /******************** Utility Methods ********************/
     function request(verb, path, additionalHeaders, data) {
         local url = format("%s/%s%s", _baseUrl, _version, path);
